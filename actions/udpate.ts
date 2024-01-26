@@ -10,8 +10,6 @@ export const updateCredential = async (
   const validation = UpdateCredentialSchema.safeParse(data);
 
   if (!validation.success) {
-    console.log(validation.error);
-
     return { error: JSON.stringify(validation.error) };
   }
 

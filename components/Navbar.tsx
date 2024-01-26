@@ -1,6 +1,5 @@
-import React from "react";
-import Search from "./credential/Search";
 import NewCredentialModal from "./credential/NewCredentialModal";
+import Search from "./credential/Search";
 
 const Navbar = () => {
   return (

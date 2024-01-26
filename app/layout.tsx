@@ -1,9 +1,8 @@
+import ModalProvider from "@/components/ModalProvider";
+import Navbar from "@/components/Navbar";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import EditCredentialModal from "@/components/credential/EditCredentialModal";
-import NewCredentialModal from "@/components/credential/NewCredentialModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,15 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* <div className="h-full w-60 fixed inset-y-0">
-          <Sidebar />
-        </div> */}
-        {/* <main className="h-full pl-60">{children}</main> */}
         <div className="w-full h-12 border-b fixed top-0 shadow-sm flex items-center justify-center">
           <Navbar />
         </div>
         <main className="h-full pt-12">{children}</main>
-        {/* modal */}
+        <ModalProvider />
       </body>
     </html>
   );

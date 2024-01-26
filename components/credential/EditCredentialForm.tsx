@@ -1,7 +1,8 @@
 "use client";
 
-import { createCredential } from "@/actions/create";
-import { CreateCredentialSchema, UpdateCredentialSchema } from "@/schemas";
+import { updateCredential } from "@/actions/udpate";
+import { useCredentialStore, useUpdateEventStore } from "@/lib/store";
+import { UpdateCredentialSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -11,13 +12,6 @@ import FormSuccess from "../FormSuccess";
 import { Button } from "../ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
-import {
-  useCredentialStore,
-  useEditModalCredentialStore,
-  useUpdateEventStore,
-} from "@/lib/store";
-import { updateCredential } from "@/actions/udpate";
-import { getCredentials } from "@/actions/get";
 import { Credential_Account_Category } from "./CredentialList";
 
 interface EditCredentialFormProps {
@@ -25,10 +19,8 @@ interface EditCredentialFormProps {
 }
 
 const EditCredentialForm = ({ credential }: EditCredentialFormProps) => {
-  const credentialId = useCredentialStore((state) => state.credentialId);
   const refreshActionId = useUpdateEventStore((state) => state.refreshActionId);
   const actionId = useUpdateEventStore((state) => state.actionId);
-  // const credential = useEditModalCredentialStore((state) => state.credential);
 
   const [showPassword, setShowPassword] = useState(true);
   const [error, setError] = useState("");
@@ -57,8 +49,6 @@ const EditCredentialForm = ({ credential }: EditCredentialFormProps) => {
   const onSubmit = (data: z.infer<typeof UpdateCredentialSchema>) => {
     setError("");
     setSuccess("");
-
-    console.log("data", data);
 
     startTransition(async () => {
       updateCredential(data).then(({ error, success }) => {

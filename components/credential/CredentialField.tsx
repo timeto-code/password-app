@@ -3,9 +3,9 @@ import { CheckCircle, EyeIcon } from "lucide-react";
 import React, { useEffect } from "react";
 
 interface CredentialFieldProps {
-  label: string;
-  value: string;
-  isPassword?: boolean;
+  label: string; // 标签
+  value: string; // 值
+  isPassword?: boolean; // 是否为密码字段
 }
 
 const CredentialField = ({
@@ -13,25 +13,25 @@ const CredentialField = ({
   value,
   isPassword,
 }: CredentialFieldProps) => {
-  const [copy, setCopy] = React.useState(false);
-  const [hidePassword, setHidePassword] = React.useState(true);
+  const [copy, setCopy] = React.useState(false); // 是否已复制到剪贴板
+  const [hidePassword, setHidePassword] = React.useState(true); // 是否隐藏密码
 
-  const palceholder = value.replace(/./g, "✽");
+  const palceholder = value.replace(/./g, "✽"); // 用✽替换值，用于密码字段的占位符
 
   const copyToClipboard = (e: React.MouseEvent) => {
     e.preventDefault();
-    navigator.clipboard.writeText(value);
+    navigator.clipboard.writeText(value); // 将值复制到剪贴板
     setCopy(true);
   };
 
   const toggleShowPassword = () => {
-    setHidePassword(!hidePassword);
+    setHidePassword(!hidePassword); // 切换显示/隐藏密码
   };
 
   useEffect(() => {
     if (copy) {
       setTimeout(() => {
-        setCopy(false);
+        setCopy(false); // 3秒后取消复制状态
       }, 3000);
     }
   }, [copy]);
@@ -39,7 +39,7 @@ const CredentialField = ({
   useEffect(() => {
     if (!hidePassword) {
       setTimeout(() => {
-        setHidePassword(true);
+        setHidePassword(true); // 5秒后隐藏密码
       }, 5000);
     }
   }, [hidePassword]);

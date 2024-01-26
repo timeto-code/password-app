@@ -1,8 +1,7 @@
 "use client";
 
-import React from "react";
-import { Input } from "../ui/input";
 import { useSearchStore } from "@/lib/store";
+import { Input } from "../ui/input";
 
 const Search = () => {
   const refreshKeyword = useSearchStore((state) => state.refreshKeyword);

@@ -29,14 +29,23 @@ export interface Credential_Account_Category {
 }
 
 const CredentialList = () => {
+  /**
+   * 凭据列表。
+   * @remarks
+   * 此组件从相应的存储中检索actionId和关键字，并管理凭据数组的状态。
+   */
   const actionId = useUpdateEventStore((state) => state.actionId);
   const keyword = useSearchStore((state) => state.keyword);
   const [credentials, setCredentials] = useState<Credential_Account_Category[]>(
     []
   );
 
+  /**
+   * 根据提供的关键字获取所有凭据并更新状态。
+   * @param {string} keyword - 用于筛选凭据的关键字。
+   * @returns {void}
+   */
   useEffect(() => {
-    console.log("actionId", actionId);
     getAllCredentials(keyword).then((res) => {
       setCredentials(res);
     });

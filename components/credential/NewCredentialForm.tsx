@@ -1,6 +1,7 @@
 "use client";
 
 import { createCredential } from "@/actions/create";
+import { useUpdateEventStore } from "@/lib/store";
 import { CreateCredentialSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
@@ -11,7 +12,6 @@ import FormSuccess from "../FormSuccess";
 import { Button } from "../ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
-import { useUpdateEventStore } from "@/lib/store";
 
 const NewCredentialForm = () => {
   const [showPassword, setShowPassword] = useState(false);

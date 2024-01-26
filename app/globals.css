@@ -78,5 +78,5 @@
 html,
 body,
 :root {
-  @apply h-full box-border;
+  @apply h-full box-border overflow-hidden;
 }

@@ -1,12 +1,9 @@
-import Image from "next/image";
-import prisma from "@/lib/db";
+import Datatable from "@/components/Datatable";
 
 export default async function Home() {
-  const credentials = await prisma.credential.findMany({});
-
   return (
-    <div>
-      <kbd>{JSON.stringify(credentials)}</kbd>
+    <div className="py-3 pl-3 overflow-auto h-full w-full">
+      <Datatable />
     </div>
   );
 }

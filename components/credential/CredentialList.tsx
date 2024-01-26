@@ -4,6 +4,7 @@ import { getAllCredentials } from "@/actions/getAll";
 import { useSearchStore, useUpdateEventStore } from "@/lib/store";
 import { useEffect, useState } from "react";
 import CredentialCard from "./CredentialCard";
+import { loadEnv } from "@/actions/loadEnv";
 
 export interface Credential_Account_Category {
   id: number;
@@ -52,7 +53,7 @@ const CredentialList = () => {
   }, [actionId, keyword]);
 
   return (
-    <div className="columns-3 gap-x-1">
+    <div className="columns-3 gap-x-3">
       {credentials.map((credential) => (
         <CredentialCard key={credential.id} credential={credential} />
       ))}

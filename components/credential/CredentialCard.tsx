@@ -12,6 +12,7 @@ import {
 import CredentialField from "./CredentialField";
 import { Credential_Account_Category } from "./CredentialList";
 import DeleteCredential from "./DeleteCredential";
+import { useEffect } from "react";
 
 interface CredentialCardProps {
   credential: Credential_Account_Category;
@@ -29,8 +30,8 @@ const CredentialCard = ({ credential }: CredentialCardProps) => {
   };
 
   return (
-    <div className="break-inside-avoid mb-1">
-      <Card className="group relative p-4 hover:shadow-md transition-all ease-in-out duration-300 w-80">
+    <div className="break-inside-avoid mb-3">
+      <Card className="group relative p-4 hover:shadow-md transition-all ease-in-out duration-300 w-80 border-stone-300">
         <CardHeader className="p-0 m-0 pb-2">
           <CardTitle className="text-md">
             <div className="flex items-center justify-between">
@@ -53,20 +54,27 @@ const CredentialCard = ({ credential }: CredentialCardProps) => {
           <CredentialField
             label="密码"
             value={credential.password || ""}
-            isPassword={true}
+            isPassword
           />
           <CredentialField
             label="应用专用密码"
             value={credential.appSpecificPassword || ""}
+            isPassword
           />
           <CredentialField
             label="激活码"
             value={credential.activationCode || ""}
+            isPassword
           />
-          <CredentialField label="API Key" value={credential.apiKey || ""} />
+          <CredentialField
+            label="API Key"
+            value={credential.apiKey || ""}
+            isPassword
+          />
           <CredentialField
             label="API Secret"
             value={credential.apiSecret || ""}
+            isPassword
           />
           {/* <div className="group absolute hidden group-hover:flex right-5 bottom-5 transition-all ease-in-out items-center justify-center hover:text-sky-400">
           <Edit className="cursor-pointer w-6 h-6" onClick={handleClick} />

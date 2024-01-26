@@ -3,6 +3,7 @@
 import { UpdateCredentialSchema } from "@/schemas";
 import { z } from "zod";
 import prisma from "@/lib/db";
+import { encrypt } from "@/lib/aes";
 
 export const updateCredential = async (
   data: z.infer<typeof UpdateCredentialSchema>
@@ -34,6 +35,7 @@ export const updateCredential = async (
   });
 
   if (!dbCategory) {
+    // 如果分类不存在，则创建新的分类
     dbCategory = await prisma.category.create({
       data: {
         name: category,
@@ -49,6 +51,7 @@ export const updateCredential = async (
   });
 
   if (!account) {
+    // 如果账户不存在，则查找同名账户
     account = await prisma.account.findUnique({
       where: {
         name: accountName,
@@ -56,6 +59,7 @@ export const updateCredential = async (
     });
 
     if (account) {
+      // 如果同名账户存在，则更新其所属分类
       await prisma.account.update({
         where: {
           id: account.id,
@@ -65,6 +69,7 @@ export const updateCredential = async (
         },
       });
     } else {
+      // 如果同名账户不存在，则创建新的账户
       account = await prisma.account.create({
         data: {
           name: accountName,
@@ -84,17 +89,18 @@ export const updateCredential = async (
     return { error: "信息不存在" };
   }
 
+  // 更新凭证信息
   await prisma.credential.update({
     where: {
       id,
     },
     data: {
-      username,
-      password,
-      activationCode,
-      appSpecificPassword,
-      apiKey,
-      apiSecret,
+      username: encrypt(username),
+      password: encrypt(password),
+      activationCode: encrypt(activationCode),
+      appSpecificPassword: encrypt(appSpecificPassword),
+      apiKey: encrypt(apiKey),
+      apiSecret: encrypt(apiSecret),
       description,
       name,
     },

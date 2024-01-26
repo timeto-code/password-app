@@ -58,13 +58,15 @@ const CredentialField = ({
           >
             {isPassword && hidePassword ? palceholder : value}
           </p>
-          {isPassword && (
-            <EyeIcon
-              className="w-4 h-4 ml-1 cursor-pointer group-hover:flex hidden"
-              onClick={toggleShowPassword}
-            />
-          )}
-          {copy && <CheckCircle className="w-4 h-4 ml-1 text-green-500" />}
+          <div className="flex items-center">
+            {isPassword && (
+              <EyeIcon
+                className="w-5 h-5 ml-1 cursor-pointer group-hover:flex hidden"
+                onClick={toggleShowPassword}
+              />
+            )}
+            {copy && <CheckCircle className="w-4 h-4 ml-1 text-green-500" />}
+          </div>
         </div>
       )}
     </>

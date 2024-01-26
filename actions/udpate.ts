@@ -10,17 +10,23 @@ export const updateCredential = async (
   const validation = UpdateCredentialSchema.safeParse(data);
 
   if (!validation.success) {
-    return { error: JSON.stringify(validation.error.format()) };
+    console.log(validation.error);
+
+    return { error: JSON.stringify(validation.error) };
   }
 
   const {
+    id,
     username,
     password,
     accountName,
     category,
-    id,
-    // activationCode,
+    activationCode,
     appSpecificPassword,
+    apiKey,
+    apiSecret,
+    description,
+    name,
   } = validation.data;
 
   let dbCategory = await prisma.category.findUnique({
@@ -45,7 +51,7 @@ export const updateCredential = async (
   });
 
   if (!account) {
-    account = await prisma.account.findFirst({
+    account = await prisma.account.findUnique({
       where: {
         name: accountName,
       },
@@ -72,7 +78,7 @@ export const updateCredential = async (
 
   const credential = await prisma.credential.findUnique({
     where: {
-      id: parseInt(id),
+      id,
     },
   });
 
@@ -82,15 +88,19 @@ export const updateCredential = async (
 
   await prisma.credential.update({
     where: {
-      id: parseInt(id),
+      id,
     },
     data: {
       username,
       password,
-      // activationCode,
+      activationCode,
       appSpecificPassword,
+      apiKey,
+      apiSecret,
+      description,
+      name,
     },
   });
 
-  return { success: "信息保存成功" };
+  return { success: "信息更新成功" };
 };

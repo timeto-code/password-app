@@ -1,9 +1,9 @@
-import Datatable from "@/components/Datatable";
+import CredentialList from "@/components/credential/CredentialList";
 
 export default async function Home() {
   return (
-    <div className="py-3 pl-3 overflow-auto h-full w-full">
-      <Datatable />
+    <div className="flex flex-col items-center justify-center w-full mx-auto p-3">
+      <CredentialList />
     </div>
   );
 }

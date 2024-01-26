@@ -10,19 +10,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Credential {
-  id                  Int     @id @default(autoincrement())
-  username            String
-  password            String?
-  activationCode      String?
-  appSpecificPassword String?
-  accountId           Int
-  account             Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  accounts Account[]
 }
 
 model Account {
   id      Int     @id @default(autoincrement())
-  name    String
+  name    String  @unique
   website String?
 
   categoryId Int?
@@ -31,9 +28,26 @@ model Account {
   credentials Credential[]
 }
 
-model Category {
-  id   Int    @id @default(autoincrement())
-  name String @unique
+model Credential {
+  id                  Int     @id @default(autoincrement())
+  name                String?
+  username            String?
+  password            String?
+  activationCode      String?
+  appSpecificPassword String?
+  description         String?
+  apiKey              String?
+  apiSecret           String?
 
-  accounts Account[]
+  accountId Int
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  historyPasswords HistoryPassword[]
+}
+
+model HistoryPassword {
+  id           Int        @id @default(autoincrement())
+  password     String
+  credentialId Int
+  credential   Credential @relation(fields: [credentialId], references: [id], onDelete: Cascade)
 }

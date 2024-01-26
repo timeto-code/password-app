@@ -1,22 +1,30 @@
 "use client";
 
-import { updateCredential } from "@/actions/udpate";
-import { UpdateCredentialSchema } from "@/schemas";
+import { createCredential } from "@/actions/create";
+import { CreateCredentialSchema, UpdateCredentialSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { use, useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import FormError from "./FormError";
-import FormSuccess from "./FormSuccess";
-import { Button } from "./ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
-import { Input } from "./ui/input";
+import z from "zod";
+import FormError from "../FormError";
+import FormSuccess from "../FormSuccess";
+import { Button } from "../ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+import { Input } from "../ui/input";
 import { useCredentialStore, useUpdateEventStore } from "@/lib/store";
-import { get } from "http";
+import { updateCredential } from "@/actions/udpate";
 import { getCredentials } from "@/actions/get";
-import DeleteButton from "./DeleteButton";
+import { Credential_Account_Category } from "./CredentialList";
 
-const EditForm = () => {
+interface EditCredentialFormProps {
+  credential: Credential_Account_Category;
+  handleClick: () => void;
+}
+
+const EditCredentialForm = ({
+  credential,
+  handleClick,
+}: EditCredentialFormProps) => {
   const credentialId = useCredentialStore((state) => state.credentialId);
   const refreshActionId = useUpdateEventStore((state) => state.refreshActionId);
 
@@ -29,12 +37,17 @@ const EditForm = () => {
   const form = useForm({
     resolver: zodResolver(UpdateCredentialSchema),
     defaultValues: {
-      id: "",
+      id: 0,
+      name: "",
       username: "",
       password: "",
+      activationCode: "",
       appSpecificPassword: "",
+      description: "",
+      apiKey: "",
+      apiSecret: "",
+
       accountName: "",
-      // activationCode: "",
       category: "",
     },
   });
@@ -42,6 +55,8 @@ const EditForm = () => {
   const onSubmit = (data: z.infer<typeof UpdateCredentialSchema>) => {
     setError("");
     setSuccess("");
+
+    console.log("data", data);
 
     startTransition(async () => {
       updateCredential(data).then(({ error, success }) => {
@@ -60,27 +75,26 @@ const EditForm = () => {
     setError("");
     setSuccess("");
 
-    if (credentialId) {
-      console.log("credentialId", credentialId);
-      getCredentials({ id: credentialId }).then(({ error, success }) => {
-        if (error) {
-          setError(error);
-        } else if (success) {
-          const credential = JSON.parse(success);
-          form.setValue("id", `${credentialId}`);
-          form.setValue("username", credential.username);
-          form.setValue("password", credential.password);
-          form.setValue("accountName", credential.account.name);
-          form.setValue("category", credential.account.category?.name);
-          // form.setValue("activationCode", credential.activationCode);
-          form.setValue("appSpecificPassword", credential.appSpecificPassword);
-        }
-      });
+    if (credential) {
+      form.setValue("id", credential.id);
+      form.setValue("username", credential.username || "");
+      form.setValue("password", credential.password || "");
+      form.setValue("activationCode", credential.activationCode || "");
+      form.setValue(
+        "appSpecificPassword",
+        credential.appSpecificPassword || ""
+      );
+      form.setValue("description", credential.description || "");
+      form.setValue("apiKey", credential.apiKey || "");
+      form.setValue("apiSecret", credential.apiSecret || "");
+
+      form.setValue("accountName", credential.account.name);
+      form.setValue("category", credential.account.category?.name || "");
     }
-  }, [form, credentialId]);
+  }, [credential, form]);
 
   return (
-    <div className=" flex flex-col gap-10">
+    <div>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-4">
           <Form {...form}>
@@ -88,9 +102,23 @@ const EditForm = () => {
               name="id"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="hidden">
+                <FormItem className="">
                   <FormLabel>
                     <div className="">ID</div>
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="accountName"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <div className="">账号</div>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -105,6 +133,20 @@ const EditForm = () => {
                 <FormItem>
                   <FormLabel>
                     <div className="">用户名</div>
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="name"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <div className="">名称</div>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -147,20 +189,6 @@ const EditForm = () => {
               )}
             />
             <FormField
-              name="accountName"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <div className="">账号</div>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            {/* <FormField
               name="activationCode"
               control={form.control}
               render={({ field }) => (
@@ -173,7 +201,51 @@ const EditForm = () => {
                   </FormControl>
                 </FormItem>
               )}
-            /> */}
+            />
+            <FormField
+              name="apiKey"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <div className="">API Key</div>
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="apiSecret"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <div className="">API Secret</div>
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="description"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <div className="">描述</div>
+                  </FormLabel>
+                  <FormControl>
+                    <div className="relative group">
+                      <Input {...field} />
+                    </div>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
             <FormField
               name="category"
               control={form.control}
@@ -184,11 +256,7 @@ const EditForm = () => {
                   </FormLabel>
                   <FormControl>
                     <div className="relative group">
-                      <Input
-                        {...field}
-                        onFocus={() => setSearchCategory(true)}
-                        onBlur={() => setSearchCategory(false)}
-                      />
+                      <Input {...field} />
                     </div>
                   </FormControl>
                 </FormItem>
@@ -197,15 +265,21 @@ const EditForm = () => {
           </Form>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button className="w-full" disabled={isPending}>
-            修改
-          </Button>
+          <div className="flex items-center justify-between">
+            <Button
+              variant="secondary"
+              type="button"
+              disabled={isPending}
+              onClick={handleClick}
+            >
+              取消
+            </Button>
+            <Button disabled={isPending}>更新</Button>
+          </div>
         </div>
       </form>
-
-      <DeleteButton />
     </div>
   );
 };
 
-export default EditForm;
+export default EditCredentialForm;

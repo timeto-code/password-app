@@ -19,7 +19,7 @@ interface EditCardProps {
 
 const EditCard = ({ credential, handleClick }: EditCardProps) => {
   return (
-    <Card className="group relative p-4 hover:shadow-md cursor-pointer transition-all ease-in-out duration-300">
+    <Card className="group relative p-4 hover:shadow-md cursor-pointer transition-all ease-in-out duration-300  w-80">
       <CardHeader className="p-0 m-0 pb-1">
         <CardTitle className="text-md">
           <div className="flex items-center justify-between">

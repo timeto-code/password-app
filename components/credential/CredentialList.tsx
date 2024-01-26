@@ -43,7 +43,7 @@ const CredentialList = () => {
   }, [actionId, keyword]);
 
   return (
-    <div className="grid grid-cols-3 gap-1">
+    <div className="columns-3 gap-x-1">
       {credentials.map((credential) => (
         <CredentialCard key={credential.id} credential={credential} />
       ))}

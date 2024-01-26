@@ -11,22 +11,24 @@ import FormSuccess from "../FormSuccess";
 import { Button } from "../ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
-import { useCredentialStore, useUpdateEventStore } from "@/lib/store";
+import {
+  useCredentialStore,
+  useEditModalCredentialStore,
+  useUpdateEventStore,
+} from "@/lib/store";
 import { updateCredential } from "@/actions/udpate";
 import { getCredentials } from "@/actions/get";
 import { Credential_Account_Category } from "./CredentialList";
 
 interface EditCredentialFormProps {
   credential: Credential_Account_Category;
-  handleClick: () => void;
 }
 
-const EditCredentialForm = ({
-  credential,
-  handleClick,
-}: EditCredentialFormProps) => {
+const EditCredentialForm = ({ credential }: EditCredentialFormProps) => {
   const credentialId = useCredentialStore((state) => state.credentialId);
   const refreshActionId = useUpdateEventStore((state) => state.refreshActionId);
+  const actionId = useUpdateEventStore((state) => state.actionId);
+  // const credential = useEditModalCredentialStore((state) => state.credential);
 
   const [showPassword, setShowPassword] = useState(true);
   const [error, setError] = useState("");
@@ -64,7 +66,7 @@ const EditCredentialForm = ({
           setError(error);
         } else {
           setSuccess(success || "创建成功");
-          refreshActionId(credentialId);
+          refreshActionId(actionId + 1);
           form.reset();
         }
       });
@@ -77,6 +79,7 @@ const EditCredentialForm = ({
 
     if (credential) {
       form.setValue("id", credential.id);
+      form.setValue("name", credential.name || "");
       form.setValue("username", credential.username || "");
       form.setValue("password", credential.password || "");
       form.setValue("activationCode", credential.activationCode || "");
@@ -102,7 +105,7 @@ const EditCredentialForm = ({
               name="id"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="">
+                <FormItem className="hidden">
                   <FormLabel>
                     <div className="">ID</div>
                   </FormLabel>
@@ -265,17 +268,9 @@ const EditCredentialForm = ({
           </Form>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <div className="flex items-center justify-between">
-            <Button
-              variant="secondary"
-              type="button"
-              disabled={isPending}
-              onClick={handleClick}
-            >
-              取消
-            </Button>
-            <Button disabled={isPending}>更新</Button>
-          </div>
+          <Button className="w-full" disabled={isPending}>
+            更新
+          </Button>
         </div>
       </form>
     </div>

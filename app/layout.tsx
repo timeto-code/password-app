@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
+import EditCredentialModal from "@/components/credential/EditCredentialModal";
+import NewCredentialModal from "@/components/credential/NewCredentialModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,6 +28,7 @@ export default function RootLayout({
           <Navbar />
         </div>
         <main className="h-full pt-12">{children}</main>
+        {/* modal */}
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { updateCredential } from "@/actions/udpate";
-import { useCredentialStore, useUpdateEventStore } from "@/lib/store";
+import { useUpdateEventStore } from "@/lib/store";
 import { UpdateCredentialSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState, useTransition } from "react";
@@ -31,7 +31,7 @@ const EditCredentialForm = ({ credential }: EditCredentialFormProps) => {
   const form = useForm({
     resolver: zodResolver(UpdateCredentialSchema),
     defaultValues: {
-      id: 0,
+      id: "",
       name: "",
       username: "",
       password: "",
@@ -69,20 +69,20 @@ const EditCredentialForm = ({ credential }: EditCredentialFormProps) => {
 
     if (credential) {
       form.setValue("id", credential.id);
-      form.setValue("name", credential.name || "");
+      form.setValue("accountName", credential.account.name);
+      form.setValue("category", credential.category.name);
+
       form.setValue("username", credential.username || "");
+      form.setValue("name", credential.name || "");
       form.setValue("password", credential.password || "");
-      form.setValue("activationCode", credential.activationCode || "");
+      form.setValue("description", credential.description || "");
       form.setValue(
         "appSpecificPassword",
         credential.appSpecificPassword || ""
       );
-      form.setValue("description", credential.description || "");
+      form.setValue("activationCode", credential.activationCode || "");
       form.setValue("apiKey", credential.apiKey || "");
       form.setValue("apiSecret", credential.apiSecret || "");
-
-      form.setValue("accountName", credential.account.name);
-      form.setValue("category", credential.account.category?.name || "");
     }
   }, [credential, form]);
 
@@ -120,6 +120,22 @@ const EditCredentialForm = ({ credential }: EditCredentialFormProps) => {
               )}
             />
             <FormField
+              name="category"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <div className="">类型</div>
+                  </FormLabel>
+                  <FormControl>
+                    <div className="relative group">
+                      <Input {...field} />
+                    </div>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
               name="username"
               control={form.control}
               render={({ field }) => (
@@ -139,7 +155,7 @@ const EditCredentialForm = ({ credential }: EditCredentialFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <div className="">名称</div>
+                    <div className="">昵称</div>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -164,6 +180,23 @@ const EditCredentialForm = ({ credential }: EditCredentialFormProps) => {
                 </FormItem>
               )}
             />
+            <FormField
+              name="description"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <div className="">描述</div>
+                  </FormLabel>
+                  <FormControl>
+                    <div className="relative group">
+                      <Input {...field} />
+                    </div>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
             <FormField
               name="appSpecificPassword"
               control={form.control}
@@ -219,38 +252,6 @@ const EditCredentialForm = ({ credential }: EditCredentialFormProps) => {
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="description"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <div className="">描述</div>
-                  </FormLabel>
-                  <FormControl>
-                    <div className="relative group">
-                      <Input {...field} />
-                    </div>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="category"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <div className="">分类</div>
-                  </FormLabel>
-                  <FormControl>
-                    <div className="relative group">
-                      <Input {...field} />
-                    </div>
                   </FormControl>
                 </FormItem>
               )}

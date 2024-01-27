@@ -10,11 +10,6 @@ export const getAllCredentials = async (value: string) => {
     filter = {
       OR: [
         {
-          username: {
-            contains: value,
-          },
-        },
-        {
           account: {
             name: {
               contains: value,
@@ -22,12 +17,20 @@ export const getAllCredentials = async (value: string) => {
           },
         },
         {
-          account: {
-            category: {
-              name: {
-                contains: value,
-              },
+          category: {
+            name: {
+              contains: value,
             },
+          },
+        },
+        {
+          name: {
+            contains: value,
+          },
+        },
+        {
+          description: {
+            contains: value,
           },
         },
       ],
@@ -37,11 +40,8 @@ export const getAllCredentials = async (value: string) => {
   const credentials = await prisma.credential.findMany({
     where: filter,
     include: {
-      account: {
-        include: {
-          category: true,
-        },
-      },
+      account: true,
+      category: true,
     },
   });
 

@@ -19,7 +19,7 @@ const NewCredentialModal = () => {
         <DialogHeader>
           <DialogTitle>新建</DialogTitle>
           <DialogDescription>
-            {/* Make changes to your profile here. Click save when youre done. */}
+            在这里对您的个人资料进行更改。完成后点击保存。
           </DialogDescription>
         </DialogHeader>
         <NewCredentialForm />

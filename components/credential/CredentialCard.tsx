@@ -2,17 +2,10 @@
 
 import { useEditModalCredentialStore, useEditModalStore } from "@/lib/store";
 import { Edit } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import CredentialField from "./CredentialField";
 import { Credential_Account_Category } from "./CredentialList";
 import DeleteCredential from "./DeleteCredential";
-import { useEffect } from "react";
 
 interface CredentialCardProps {
   credential: Credential_Account_Category;
@@ -32,7 +25,7 @@ const CredentialCard = ({ credential }: CredentialCardProps) => {
   return (
     <div className="break-inside-avoid mb-3">
       <Card className="group relative p-4 hover:shadow-md transition-all ease-in-out duration-300 w-80 border-stone-300">
-        <CardHeader className="p-0 m-0 pb-2">
+        <CardHeader className="p-0 m-0 pb-3">
           <CardTitle className="text-md">
             <div className="flex items-center justify-between">
               <p>{credential.account.name}</p>
@@ -46,11 +39,14 @@ const CredentialCard = ({ credential }: CredentialCardProps) => {
               </div>
             </div>
           </CardTitle>
-          <CardDescription>{credential.description}</CardDescription>
         </CardHeader>
         <CardContent className="group flex flex-col gap-2 m-0 p-0 text-sm">
-          <CredentialField label="名称" value={credential.name || ""} />
+          <CredentialField
+            label="类型"
+            value={credential.category.name || ""}
+          />
           <CredentialField label="用户名" value={credential.username || ""} />
+          <CredentialField label="昵称" value={credential.name || ""} />
           <CredentialField
             label="密码"
             value={credential.password || ""}
@@ -76,6 +72,7 @@ const CredentialCard = ({ credential }: CredentialCardProps) => {
             value={credential.apiSecret || ""}
             isPassword
           />
+          <CredentialField label="描述" value={credential.description || ""} />
           {/* <div className="group absolute hidden group-hover:flex right-5 bottom-5 transition-all ease-in-out items-center justify-center hover:text-sky-400">
           <Edit className="cursor-pointer w-6 h-6" onClick={handleClick} />
         </div> */}

@@ -6,30 +6,12 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model Category {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-
-  accounts Account[]
-}
-
-model Account {
-  id      Int     @id @default(autoincrement())
-  name    String  @unique
-  website String?
-
-  categoryId Int?
-  category   Category? @relation(fields: [categoryId], references: [id])
-
-  credentials Credential[]
-}
-
 model Credential {
-  id                  Int     @id @default(autoincrement())
+  id                  String  @id @default(uuid())
   name                String?
   username            String?
   password            String?
@@ -39,15 +21,33 @@ model Credential {
   apiKey              String?
   apiSecret           String?
 
-  accountId Int
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  accountId String
   account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
   historyPasswords HistoryPassword[]
 }
 
+model Category {
+  id   String @id @default(uuid())
+  name String @unique
+
+  credentials Credential[]
+}
+
+model Account {
+  id      String  @id @default(uuid())
+  name    String  @unique
+  website String?
+
+  credentials Credential[]
+}
+
 model HistoryPassword {
-  id           Int        @id @default(autoincrement())
+  id           String     @id @default(uuid())
   password     String
-  credentialId Int
+  credentialId String
   credential   Credential @relation(fields: [credentialId], references: [id], onDelete: Cascade)
 }

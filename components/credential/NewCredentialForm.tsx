@@ -57,155 +57,159 @@ const NewCredentialForm = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-4">
-          <Form {...form}>
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                name="accountName"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <div className="">账号</div>
-                    </FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="category"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <div className="">分类</div>
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative group">
-                        <Input {...field} />
-                      </div>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="username"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <div className="">用户名</div>
-                    </FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="name"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <div className="">名称</div>
-                    </FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="password"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <div className="">密码</div>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type={showPassword ? "text" : "password"}
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="appSpecificPassword"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <div className="">应用专用密码</div>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type={showPassword ? "text" : "password"}
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-            <FormField
-              name="activationCode"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <div className="">激活码</div>
-                  </FormLabel>
-                  <FormControl>
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      <div className="flex flex-col gap-4">
+        <Form {...form}>
+          <FormField
+            name="accountName"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <div className="">账号</div>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="category"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <div className="">类型</div>
+                </FormLabel>
+                <FormControl>
+                  <div className="relative group">
                     <Input {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="apiKey"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <div className="">API Key</div>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="apiSecret"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <div className="">API Secret</div>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </Form>
-          <FormError message={error} />
-          <FormSuccess message={success} />
-          <Button className="w-full" disabled={isPending}>
-            创建
-          </Button>
-        </div>
-      </form>
-    </div>
+                  </div>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="username"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <div className="">用户名</div>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="password"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <div className="">密码</div>
+                </FormLabel>
+                <FormControl>
+                  <Input type={showPassword ? "text" : "password"} {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="name"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <div className="">昵称</div>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="description"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <div className="">描述</div>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="appSpecificPassword"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <div className="">应用专用密码</div>
+                </FormLabel>
+                <FormControl>
+                  <Input type={showPassword ? "text" : "password"} {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="activationCode"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <div className="">激活码</div>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="apiKey"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <div className="">API Key</div>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="apiSecret"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <div className="">API Secret</div>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </Form>
+        <FormError message={error} />
+        <FormSuccess message={success} />
+        <Button className="w-full mt-3" disabled={isPending}>
+          创建
+        </Button>
+      </div>
+    </form>
   );
 };
 

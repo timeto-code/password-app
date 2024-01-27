@@ -1,35 +1,40 @@
 "use client";
 
 import { getAllCredentials } from "@/actions/getAll";
+import { loadEnv } from "@/actions/loadEnv";
 import { useSearchStore, useUpdateEventStore } from "@/lib/store";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import CredentialCard from "./CredentialCard";
-import { loadEnv } from "@/actions/loadEnv";
 
 export interface Credential_Account_Category {
-  id: number;
-  name: string | null;
-  username: string | null;
-  password: string | null;
-  activationCode: string | null;
-  appSpecificPassword: string | null;
-  description: string | null;
-  apiKey: string | null;
-  apiSecret: string | null;
-  accountId: number;
+  id: string;
+
+  accountId: string;
   account: {
-    id: number;
+    id: string;
     name: string;
     website: string | null;
-    categoryId: number | null;
-    category: {
-      id: number;
-      name: string;
-    } | null;
   };
+
+  categoryId: string | null;
+  category: {
+    id: string;
+    name: string;
+  };
+
+  username: string | null;
+  name: string | null;
+  password: string | null;
+  description: string | null;
+  appSpecificPassword: string | null;
+  activationCode: string | null;
+  apiKey: string | null;
+  apiSecret: string | null;
 }
 
 const CredentialList = () => {
+  const [evnLoaded, setEvnLoaded] = useState(false);
   /**
    * 凭据列表。
    * @remarks
@@ -47,10 +52,35 @@ const CredentialList = () => {
    * @returns {void}
    */
   useEffect(() => {
+    loadEnv().then(({ error, sucess }) => {
+      if (error) {
+        setEvnLoaded(false);
+      } else {
+        setEvnLoaded(true);
+      }
+    });
+
     getAllCredentials(keyword).then((res) => {
       setCredentials(res);
     });
   }, [actionId, keyword]);
+
+  if (!evnLoaded) {
+    return (
+      <div className="h-full w-full flex flex-col items-center justify-center gap-2">
+        <Image
+          src="/usb-drive.png"
+          alt="usb-drive"
+          width={200}
+          height={100}
+          className="mx-auto rotate-90"
+          quality={100}
+          priority={true}
+        />
+        <p className="font-semibold">请插入密钥</p>
+      </div>
+    );
+  }
 
   return (
     <div className="columns-3 gap-x-3">

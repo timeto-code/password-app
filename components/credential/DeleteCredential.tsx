@@ -12,13 +12,11 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import { Button } from "../ui/button";
 
 interface DeleteCredentialProps {
-  credentialId: number;
+  credentialId: string;
 }
 
 const DeleteCredential = ({ credentialId }: DeleteCredentialProps) => {

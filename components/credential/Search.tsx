@@ -1,8 +1,8 @@
 "use client";
 
 import { useSearchStore } from "@/lib/store";
-import { Input } from "../ui/input";
 import { ElementRef, useEffect, useRef } from "react";
+import { Input } from "../ui/input";
 
 const Search = () => {
   const inpRef = useRef<ElementRef<"input">>(null);

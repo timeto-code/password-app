@@ -23,16 +23,16 @@ export const createCredential = async (
 
   // 从解析成功的数据中解构出需要的字段
   const {
-    username,
-    password,
     accountName,
     category,
+    name,
+    username,
+    password,
+    description,
     activationCode,
     appSpecificPassword,
     apiKey,
     apiSecret,
-    description,
-    name,
   } = validation.data;
 
   // 在数据库中查找是否存在该类别
@@ -54,52 +54,32 @@ export const createCredential = async (
   // 在数据库中查找是否存在该账户
   let account = await prisma.account.findUnique({
     where: {
-      name: accountName,
-      categoryId: dbCategory.id,
+      name: accountName.trim(),
     },
   });
 
   // 如果不存在，就创建一个新的账户
   if (!account) {
-    account = await prisma.account.findUnique({
-      where: {
-        name: accountName,
+    account = await prisma.account.create({
+      data: {
+        name: accountName.trim(),
       },
     });
-
-    // 如果账户存在，就更新账户的类别
-    if (account) {
-      await prisma.account.update({
-        where: {
-          id: account.id,
-        },
-        data: {
-          categoryId: dbCategory.id,
-        },
-      });
-    } else {
-      // 如果账户不存在，就创建一个新的账户
-      account = await prisma.account.create({
-        data: {
-          name: accountName,
-          categoryId: dbCategory.id,
-        },
-      });
-    }
   }
 
   // 创建一个新的凭证
   await prisma.credential.create({
     data: {
+      accountId: account.id,
+      categoryId: dbCategory.id,
       name,
       username: encrypt(username),
       password: encrypt(password),
-      accountId: account.id,
-      activationCode: encrypt(activationCode),
+      description,
       appSpecificPassword: encrypt(appSpecificPassword),
+      activationCode: encrypt(activationCode),
       apiKey: encrypt(apiKey),
       apiSecret: encrypt(apiSecret),
-      description,
     },
   });
 

@@ -10,12 +10,12 @@ export const CreateCredentialSchema = z.object({
   apiKey: z.string(),
   apiSecret: z.string(),
 
-  accountName: z.string(),
+  accountName: z.string().min(1).max(255),
   category: z.string(),
 });
 
 export const UpdateCredentialSchema = z.object({
-  id: z.number(),
+  id: z.string().min(1).max(10000),
   name: z.string(),
   username: z.string(),
   password: z.string(),
@@ -29,10 +29,6 @@ export const UpdateCredentialSchema = z.object({
   category: z.string(),
 });
 
-export const GetCredential = z.object({
-  id: z.number(),
-});
-
 export const DeleteCredential = z.object({
-  id: z.number(),
+  id: z.string().min(1).max(10000),
 });

@@ -16,16 +16,16 @@ export const updateCredential = async (
 
   const {
     id,
-    username,
-    password,
     accountName,
     category,
-    activationCode,
+    username,
+    name,
+    password,
+    description,
     appSpecificPassword,
+    activationCode,
     apiKey,
     apiSecret,
-    description,
-    name,
   } = validation.data;
 
   let dbCategory = await prisma.category.findUnique({
@@ -45,38 +45,17 @@ export const updateCredential = async (
 
   let account = await prisma.account.findFirst({
     where: {
-      name: accountName,
-      categoryId: dbCategory.id,
+      name: accountName.trim(),
     },
   });
 
+  // 如果同名账户不存在，则创建新的账户
   if (!account) {
-    // 如果账户不存在，则查找同名账户
-    account = await prisma.account.findUnique({
-      where: {
-        name: accountName,
+    account = await prisma.account.create({
+      data: {
+        name: accountName.trim(),
       },
     });
-
-    if (account) {
-      // 如果同名账户存在，则更新其所属分类
-      await prisma.account.update({
-        where: {
-          id: account.id,
-        },
-        data: {
-          categoryId: dbCategory.id,
-        },
-      });
-    } else {
-      // 如果同名账户不存在，则创建新的账户
-      account = await prisma.account.create({
-        data: {
-          name: accountName,
-          categoryId: dbCategory.id,
-        },
-      });
-    }
   }
 
   const credential = await prisma.credential.findUnique({
@@ -95,14 +74,16 @@ export const updateCredential = async (
       id,
     },
     data: {
+      accountId: account.id,
+      categoryId: dbCategory.id,
       username: encrypt(username),
+      name,
       password: encrypt(password),
-      activationCode: encrypt(activationCode),
+      description,
       appSpecificPassword: encrypt(appSpecificPassword),
+      activationCode: encrypt(activationCode),
       apiKey: encrypt(apiKey),
       apiSecret: encrypt(apiSecret),
-      description,
-      name,
     },
   });
 
